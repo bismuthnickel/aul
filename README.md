@@ -1,5 +1,10 @@
 evil
 # how to use
+```
+./build.sh
+./aul < helloworld.aul
+```
+# standardy thing
 `aX` stores the following number (X) in the variable a<br />
 `bX` stores the following number (X) in the variable b<br />
 `s` swaps the values of a and b<br />
