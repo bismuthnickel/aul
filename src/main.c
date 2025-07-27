@@ -160,5 +160,6 @@ int main() {
             i += length_of_instruction_at(program, i);
         }
     }
+    free(program);
     return 0;
 }
