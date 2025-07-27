@@ -24,6 +24,7 @@ uint8_t length_of_instruction_at(char* program, uint32_t i) {
         case 'g':
         case 'G':
         case 'C':
+        case 'r':
             return 3;
         case 'S':
             return 2;
@@ -66,6 +67,7 @@ int main() {
             if (program[i] == 0xa || program[i] == 0xd) {
                 comment = false;
             } else {
+                i++;
                 continue;
             }
         }
@@ -148,6 +150,7 @@ int main() {
                 break;
             case 'R':
                 i = callStack[--cs];
+                jumped = true;
                 break;
             case ';':
                 comment = true;
