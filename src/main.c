@@ -33,16 +33,57 @@ uint8_t length_of_instruction_at(char* program, uint32_t i) {
     }
 }
 
-int main() {
-    char* program = malloc(1);
-    int size = 1;
-    program[0] = 0;
-    int ch;
-    while ((ch = getchar()) != EOF) {
-        program = realloc(program, ++size);
-        program[size-2] = (char)ch;
-        program[size-1] = 0;
+char* read_file(const char* filename, uint32_t* size) {
+    FILE *file = fopen(filename, "rb");
+    if (!file) {
+        puts("Failed to open file");
+        return NULL;
     }
+
+    if (fseek(file, 0, SEEK_END) != 0) {
+        fclose(file);
+        puts("fseek failed");
+        return NULL;
+    }
+
+    long filesize = ftell(file);
+    if (filesize < 0) {
+        fclose(file);
+        puts("ftell failed");
+        return NULL;
+    }
+
+    rewind(file);
+
+    char *buffer = malloc(filesize + 1);
+    if (!buffer) {
+        fclose(file);
+        puts("Memory allocation failed");
+        return NULL;
+    }
+
+    size_t read_bytes = fread(buffer, 1, filesize, file);
+    if (read_bytes != filesize) {
+        free(buffer);
+        fclose(file);
+        puts("Failed to read entire file");
+        return NULL;
+    }
+
+    buffer[filesize] = '\0';
+
+    fclose(file);
+
+    *size = filesize+1;
+
+    return buffer;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc != 2)
+        return -1;
+    uint32_t size;
+    char* program = read_file(argv[1], &size);
     uint8_t a = 0;
     uint8_t b = 0;
     uint16_t s = 0;
@@ -96,6 +137,9 @@ int main() {
                 break;
             case 'P':
                 printf("%u", a);
+                break;
+            case 'x':
+                printf("%02x", a);
                 break;
             case 'g':
                 i = labelPositions[hex_chars_to_byte(program[i+1], program[i+2])];

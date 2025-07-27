@@ -12,6 +12,7 @@ evil
 `i` inputs an ascii value into a<br />
 `p` prints an ascii value from a<br />
 `P` prints the value of a as an integer<br />
+`x` prints the value of a as a hex byte<br />
 `lX` defines a label X (labels are numbers)<br />
 `gX` goes to a label X<br />
 `GX` goes to a label X if the last operation resulted in a 0<br />
